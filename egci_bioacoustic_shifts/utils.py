@@ -18,7 +18,7 @@ import csv
 import pandas as pd
 
 from datasets import load_dataset, Dataset, DatasetDict
-import tensorflow_hub as hub
+# import tensorflow_hub as hub
 from torch import binary_cross_entropy_with_logits, Tensor
 
 from tqdm import tqdm
@@ -49,7 +49,7 @@ def class_names_from_csv(labels_path=None):
         class_names = [mid[0] for mid in csv_reader]
         return class_names[1:]
 
-def process_data(data: dict, audio_processing: Callable = lambda x: x ):
+def process_data(data: dict, audio_processing: Callable = lambda x: x, lag=256 ):
     """
     Processes data from dictionary of audio data (e.g. dataset row)
     
@@ -75,7 +75,7 @@ def process_data(data: dict, audio_processing: Callable = lambda x: x ):
 
         audio = audio_processing(audio)
     
-        h, c, lag = EGCI(audio)
+        h, c, lag = EGCI(audio, lag=lag)
     except Exception as e:
         print(e)
         return None
@@ -85,8 +85,8 @@ def process_data(data: dict, audio_processing: Callable = lambda x: x ):
             "offset_s": 0,
             "sr": sr,
             "gt": data["ebird_code_multilabel"],
-            "entropy": h,
-            "complexity": c,
+            # "entropy": h,
+            # "complexity": c,
             "lag": lag
         }
     return output_data
@@ -176,12 +176,12 @@ def EGCI(x: np.ndarray, lag: int = 512) -> tuple[float]:
     
     x = zscore(x)
     
-    # Algorithm steps 
+    # # Algorithm steps 
     rxx = acf(x, nlags=lag, adjusted=True, fft=True)
     
-    #https://github.com/blue-yonder/tsfresh/issues/902
+    # #https://github.com/blue-yonder/tsfresh/issues/902
     Sxx = toeplitz(rxx)
-    s = np.linalg.svd(Sxx)[1] #svd(Sxx)
+    s = np.linalg.svd(Sxx, compute_uv=False)
     
     return Entropy(s), Entropy(s)*JSD(s), lag           # (Entropy, Complexity)
 
@@ -269,13 +269,13 @@ def load_EGCI_losses(
         fig=None, 
         indx=50,
         process_data_func=process_data_with_identity, label_fig="",
-        lag: int = 512,
-        model=hub.load('https://www.kaggle.com/models/google/bird-vocalization-classifier/TensorFlow2/bird-vocalization-classifier/8'),
-        labels_path=hub.resolve('https://www.kaggle.com/models/google/bird-vocalization-classifier/TensorFlow2/bird-vocalization-classifier/8') + "/assets/label.csv"):
+        lag: int = 512
+    ):
     """
     Calculates and plots EGCI for the BirdSet data along with losses 
     """
-    
+    model=hub.load('https://www.kaggle.com/models/google/bird-vocalization-classifier/TensorFlow2/bird-vocalization-classifier/8'),
+    labels_path=hub.resolve('https://www.kaggle.com/models/google/bird-vocalization-classifier/TensorFlow2/bird-vocalization-classifier/8') + "/assets/label.csv"
     cotas = pd.read_csv('plotting_utils/Cotas_HxC_bins_' + str(int(lag)) + '.csv')
     noise = pd.read_csv('plotting_utils/coloredNoises_' + str(int(lag)) + '.csv')
     

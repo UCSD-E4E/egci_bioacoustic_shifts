@@ -1,3 +1,4 @@
+from multiprocessing import Pool
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 import random
