@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "audiomentations>=0.40.0",
-    "datasets[audio]>=3.5.1",
+    "datasets>=3.5.1,<4.0.0",
     "ipykernel>=6.29.5",
     "ipywidgets>=8.1.6",
     "librosa>=0.10.2.post1",
@@ -23,13 +23,15 @@ dependencies = [
     "wandb>=0.19.10",
     "seaborn>=0.13.2",
     "statsmodels>=0.14.5",
-    "lapjv",
     "scikit-image>=0.25.2",
     "tensorflow>=2.19.0",
     "tensorflow-hub>=0.16.1",
     "perch>=0.0.9",
     "plotly>=6.2.0",
 ]
+
+[tool.setuptools]
+packages = ["egci_bioacoustic_shifts"]
 
 [project.optional-dependencies]
 cpu = [

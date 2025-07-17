@@ -16,4 +16,4 @@ def import_tensorflow():
 
 tf = import_tensorflow()
 
-import utils
+from .utils import *

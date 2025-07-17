@@ -101,7 +101,7 @@ def process_data_with_identity(data):
 def multiprocess_data(
         process_data_func: Callable = process_data, 
         data_repo: Optional[Dataset] = None,  
-        processes: int = 8, 
+        processes: int = 1, 
         sample=50) -> tuple[list]:
     """
     Takes samples from an audio dataset split and calculates EGCI 

@@ -479,7 +479,7 @@ wheels = [
 
 [[package]]
 name = "datasets"
-version = "4.0.0"
+version = "3.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dill" },
@@ -496,20 +496,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "xxhash" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e3/9d/348ed92110ba5f9b70b51ca1078d4809767a835aa2b7ce7e74ad2b98323d/datasets-4.0.0.tar.gz", hash = "sha256:9657e7140a9050db13443ba21cb5de185af8af944479b00e7ff1e00a61c8dbf1", size = 569566, upload-time = "2025-07-09T14:35:52.431Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1a/89/d3d6fef58a488f8569c82fd293ab7cbd4250244d67f425dcae64c63800ea/datasets-3.6.0.tar.gz", hash = "sha256:1b2bf43b19776e2787e181cfd329cb0ca1a358ea014780c3581e0f276375e041", size = 569336, upload-time = "2025-05-07T15:15:02.659Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/eb/62/eb8157afb21bd229c864521c1ab4fa8e9b4f1b06bafdd8c4668a7a31b5dd/datasets-4.0.0-py3-none-any.whl", hash = "sha256:7ef95e62025fd122882dbce6cb904c8cd3fbc829de6669a5eb939c77d50e203d", size = 494825, upload-time = "2025-07-09T14:35:50.658Z" },
-]
-
-[package.optional-dependencies]
-audio = [
-    { name = "soundfile" },
-    { name = "torch", version = "2.7.1", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform == 'darwin' and extra == 'extra-23-egci-bioacoustic-shifts-cpu') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
-    { name = "torch", version = "2.7.1", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra != 'extra-23-egci-bioacoustic-shifts-cpu' and extra != 'extra-23-egci-bioacoustic-shifts-cu126' and extra != 'extra-23-egci-bioacoustic-shifts-cu128')" },
-    { name = "torch", version = "2.7.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-23-egci-bioacoustic-shifts-cpu') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
-    { name = "torch", version = "2.7.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "extra == 'extra-23-egci-bioacoustic-shifts-cu126' or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
-    { name = "torch", version = "2.7.1+cu128", source = { registry = "https://download.pytorch.org/whl/cu128" }, marker = "(extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra != 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra != 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
-    { name = "torchcodec" },
+    { url = "https://files.pythonhosted.org/packages/20/34/a08b0ee99715eaba118cbe19a71f7b5e2425c2718ef96007c325944a1152/datasets-3.6.0-py3-none-any.whl", hash = "sha256:25000c4a2c0873a710df127d08a202a06eab7bf42441a6bc278b499c2f72cd1b", size = 491546, upload-time = "2025-05-07T15:14:59.742Z" },
 ]
 
 [[package]]
@@ -557,10 +546,9 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "audiomentations" },
-    { name = "datasets", extra = ["audio"] },
+    { name = "datasets" },
     { name = "ipykernel" },
     { name = "ipywidgets" },
-    { name = "lapjv" },
     { name = "librosa" },
     { name = "matplotlib" },
     { name = "pandas" },
@@ -602,10 +590,9 @@ cu128 = [
 [package.metadata]
 requires-dist = [
     { name = "audiomentations", specifier = ">=0.40.0" },
-    { name = "datasets", extras = ["audio"], specifier = ">=3.5.1" },
+    { name = "datasets", specifier = ">=3.5.1,<4.0.0" },
     { name = "ipykernel", specifier = ">=6.29.5" },
     { name = "ipywidgets", specifier = ">=8.1.6" },
-    { name = "lapjv", git = "https://github.com/src-d/lapjv" },
     { name = "librosa", specifier = ">=0.10.2.post1" },
     { name = "matplotlib", specifier = ">=3.10.3" },
     { name = "pandas", specifier = ">=2.2.3" },
@@ -1179,14 +1166,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/05/f9/27e94c1b3eb29e6933b6986ffc5fa1177d2cd1f0c8efc5f02c91c9ac61de/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_ppc64le.whl", hash = "sha256:151dffc4865e5fe6dafce5480fab84f950d14566c480c08a53c663a0020504b6", size = 2390661, upload-time = "2024-12-24T18:30:34.939Z" },
     { url = "https://files.pythonhosted.org/packages/d9/d4/3c9735faa36ac591a4afcc2980d2691000506050b7a7e80bcfe44048daa7/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_s390x.whl", hash = "sha256:577facaa411c10421314598b50413aa1ebcf5126f704f1e5d72d7e4e9f020d90", size = 2546710, upload-time = "2024-12-24T18:30:37.281Z" },
     { url = "https://files.pythonhosted.org/packages/4c/fa/be89a49c640930180657482a74970cdcf6f7072c8d2471e1babe17a222dc/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:be4816dc51c8a471749d664161b434912eee82f2ea66bd7628bd14583a833e85", size = 2349213, upload-time = "2024-12-24T18:30:40.019Z" },
-]
-
-[[package]]
-name = "lapjv"
-version = "1.3.27"
-source = { git = "https://github.com/src-d/lapjv#ba122252b8cfc955bd68ceeb6a54d6608343568b" }
-dependencies = [
-    { name = "numpy" },
 ]
 
 [[package]]
@@ -1917,7 +1896,7 @@ resolution-markers = [
     "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux'",
 ]
 dependencies = [
-    { name = "nvidia-cublas-cu12", version = "12.8.3.14", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
+    { name = "nvidia-cublas-cu12", version = "12.8.3.14", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (platform_machine == 'aarch64' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (sys_platform != 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c1/2e/ec5dda717eeb1de3afbbbb611ca556f9d6d057470759c6abd36d72f0063b/nvidia_cudnn_cu12-9.7.1.26-py3-none-manylinux_2_27_aarch64.whl", hash = "sha256:848a61d40ef3b32bd4e1fadb599f0cf04a4b942fbe5fb3be572ad75f9b8c53ef", size = 725862213, upload-time = "2025-02-06T22:14:57.169Z" },
@@ -1955,7 +1934,7 @@ resolution-markers = [
     "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux'",
 ]
 dependencies = [
-    { name = "nvidia-nvjitlink-cu12", version = "12.8.61", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
+    { name = "nvidia-nvjitlink-cu12", version = "12.8.61", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (platform_machine == 'aarch64' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (sys_platform != 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/72/95/6157cb45a49f5090a470de42353a22a0ed5b13077886dca891b4b0e350fe/nvidia_cufft_cu12-11.3.3.41-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:68509dcd7e3306e69d0e2d8a6d21c8b25ed62e6df8aac192ce752f17677398b5", size = 193108626, upload-time = "2025-01-23T17:55:49.192Z" },
@@ -2055,9 +2034,9 @@ resolution-markers = [
     "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux'",
 ]
 dependencies = [
-    { name = "nvidia-cublas-cu12", version = "12.8.3.14", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
-    { name = "nvidia-cusparse-cu12", version = "12.5.7.53", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
-    { name = "nvidia-nvjitlink-cu12", version = "12.8.61", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
+    { name = "nvidia-cublas-cu12", version = "12.8.3.14", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (platform_machine == 'aarch64' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (sys_platform != 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
+    { name = "nvidia-cusparse-cu12", version = "12.5.7.53", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (platform_machine == 'aarch64' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (sys_platform != 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
+    { name = "nvidia-nvjitlink-cu12", version = "12.8.61", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (platform_machine == 'aarch64' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (sys_platform != 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/8c/ce/4214a892e804b20bf66d04f04a473006fc2d3dac158160ef85f1bc906639/nvidia_cusolver_cu12-11.7.2.55-py3-none-manylinux_2_27_aarch64.whl", hash = "sha256:0fd9e98246f43c15bee5561147ad235dfdf2d037f5d07c9d41af3f7f72feb7cc", size = 260094827, upload-time = "2025-01-23T17:58:17.586Z" },
@@ -2095,7 +2074,7 @@ resolution-markers = [
     "python_full_version < '3.12' and platform_machine != 'aarch64' and sys_platform == 'linux'",
 ]
 dependencies = [
-    { name = "nvidia-nvjitlink-cu12", version = "12.8.61", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
+    { name = "nvidia-nvjitlink-cu12", version = "12.8.61", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine != 'aarch64' and sys_platform == 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (platform_machine == 'aarch64' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (sys_platform != 'linux' and extra == 'extra-23-egci-bioacoustic-shifts-cu126' and extra == 'extra-23-egci-bioacoustic-shifts-cu128') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu126') or (extra == 'extra-23-egci-bioacoustic-shifts-cpu' and extra == 'extra-23-egci-bioacoustic-shifts-cu128')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2e/a2/313db0453087f5324a5900380ca2e57e050c8de76f407b5e11383dc762ae/nvidia_cusparse_cu12-12.5.7.53-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:d869c6146ca80f4305b62e02d924b4aaced936f8173e3cef536a67eed2a91af1", size = 291963692, upload-time = "2025-01-23T17:59:40.325Z" },
@@ -3765,21 +3744,6 @@ wheels = [
     { url = "https://download.pytorch.org/whl/cu128/torch-2.7.1%2Bcu128-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:f112465fdf42eb1297c6dddda1a8b7f411914428b704e1b8a47870c52e290909" },
     { url = "https://download.pytorch.org/whl/cu128/torch-2.7.1%2Bcu128-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:c355db49c218ada70321d5c5c9bb3077312738b99113c8f3723ef596b554a7b9" },
     { url = "https://download.pytorch.org/whl/cu128/torch-2.7.1%2Bcu128-cp313-cp313t-win_amd64.whl", hash = "sha256:e27e5f7e74179fb5d814a0412e5026e4b50c9e0081e9050bc4c28c992a276eb1" },
-]
-
-[[package]]
-name = "torchcodec"
-version = "0.4.0"
-source = { registry = "https://pypi.org/simple" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/09/b7/481cec9d5d3d679919632bf873720c905cb4af8b157a363c8f4b470bfd35/torchcodec-0.4.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:4a1c488df253c62ed67b945f3be27a800acbc3fecacda52127fbabd72a2c6e2b", size = 2972557, upload-time = "2025-05-16T08:48:33.1Z" },
-    { url = "https://files.pythonhosted.org/packages/31/d8/7e00a46cb6f8d5dc01c88f67f5014835c39e1189f7ff0bbd82c363aeef0f/torchcodec-0.4.0-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:a2b3ee4c40236eec82faa61f5941f1bb746bed81bb0a0e00751142f0cbf0e5e0", size = 1328647, upload-time = "2025-05-16T08:48:17.15Z" },
-    { url = "https://files.pythonhosted.org/packages/04/9d/18944c18f5c29516fc5e920d764904b703775812c4b4756b11ed6970f1df/torchcodec-0.4.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:29ee0ad7514d5636d3a889cbdc92d4ed68e8f283d8da971fc6faa001e3e5dd67", size = 3461019, upload-time = "2025-05-16T08:48:34.751Z" },
-    { url = "https://files.pythonhosted.org/packages/17/26/2ac91c004d2c7cf813c8ccc151e7760b0d4b4f8ba26648d873e8fa7654be/torchcodec-0.4.0-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:0c1211bc2fb68cac5080d71635880e5a1ddc0d95f038cad1f7c3d5c32492f770", size = 1327571, upload-time = "2025-05-16T08:48:18.847Z" },
-    { url = "https://files.pythonhosted.org/packages/c6/7b/c15be1378e4816d72d2cb544cd161154131aedae2121667019452e47d78f/torchcodec-0.4.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:89d95adb8cf89cf85ff1c09c15f3de0df3b63c2e6cae5be0b387af0e8c84dbec", size = 3398659, upload-time = "2025-05-16T08:48:36.941Z" },
-    { url = "https://files.pythonhosted.org/packages/be/ce/451a1e79964790866d58f005a8789334434076457912ba295c73961a1ccf/torchcodec-0.4.0-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:474b476880b70f44dce47672a98e3516cd15bad2ddde2d0537319d12c0a3e80e", size = 1327372, upload-time = "2025-05-16T08:48:21.968Z" },
-    { url = "https://files.pythonhosted.org/packages/8f/04/bc5c72c279e77bdeaf0b26178c650e61800798c1fc4ff6b9353760f8ee5a/torchcodec-0.4.0-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:51e94f4eb63bac48e7ec4fc11c03ddb0cfa9af7210077d507666ecb2aa81e0ac", size = 3304288, upload-time = "2025-05-16T08:48:38.835Z" },
-    { url = "https://files.pythonhosted.org/packages/04/a5/9ff2b9819058fd3114a794c34df7992874ab62a0ad180879ba4d9d3f392d/torchcodec-0.4.0-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:87a85dfd1e1555c48c61bc152f03545d11940b71cf55079aa4c06cd41492467f", size = 1327762, upload-time = "2025-05-16T08:48:23.98Z" },
 ]
 
 [[package]]
