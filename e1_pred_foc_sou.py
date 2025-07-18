@@ -3,8 +3,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 import random
 import numpy as np
+import copy
+import json
+from egci_bioacoustic_shifts import load_EGCI, measure_distrbution_metrics
 
-from egci_bioacoustic_shifts import load_EGCI
+# Experiment Parameters
+regions = ["HSN", "PER", "UHH", "SNE", "POW", "NES"]
+num_samples = 1000 #2000
+num_trials = 100
 
 
 # TODO: Move data into its own file
@@ -13,7 +19,7 @@ def get_X_Y(data, reshuffle_labels=False):
     if reshuffle_labels:
         random.shuffle(labels)
     data[:, 2] = labels
-    return data
+    return data[:, :2], labels
 
 def run_trial(dataset, get_X_Y, reshuffle_labels=False, test_size=0.2):
     X, y = get_X_Y(dataset, reshuffle_labels=reshuffle_labels)
@@ -38,33 +44,42 @@ def run_experiment(dataset_info, get_X_Y, iterations=100):
     }
 
 
-# Experiment Parameters
-regions = ["HSN", "PER", "UHH", "SNE", "POW", "COR"]
-num_samples = 2000
-num_trials = 100
-
 # Actual Experiment
 experiment_results = {}
-for region in regions:
-    _, _, soundscape_data, _ = load_EGCI(indx=num_samples, region=region, dataset_sub="test_5s")
-    _, _, focal_data, _ = load_EGCI(indx=num_samples, region=region, dataset_sub="train")
+for region in regions:              #Change sample to indx
+    _, _, soundscape_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="test_5s")
+    _, _, focal_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="train")
     
     # Format focal and soundscape EGCI for SVM
     labels = []
-    (h, c, ) = soundscape_data
+    (h, c, _) = copy.deepcopy(soundscape_data)
     labels.extend([0] * num_samples)
 
     h.extend(focal_data[0])
     c.extend(focal_data[1])
     labels.extend([1] * num_samples)
 
-    data = np.vstack((np.array(h), np.array(c)), np.array(labels)).T
+    data = np.vstack((np.array(h), np.array(c), np.array(labels))).T
     np.random.shuffle(data)
+    print(data[0], data.shape)
 
     # Run SVM training and permutation test
-    experiment_results[region] = run_experiment(data, get_X_Y, iterations=num_trials)
-    print(experiment_results[region] )
+    experiment_results[region] = {}
+    experiment_results[region]["svm"] = run_experiment(data, get_X_Y, iterations=num_trials)
+    
 
     # TODO Add in the normal divergence metrics
+    print("start divergence")
+    experiment_results[region]["div"] = measure_distrbution_metrics(
+        np.vstack((np.array(focal_data[0]), np.array(focal_data[1]))).T,
+        np.vstack((np.array(soundscape_data[0]), np.array(soundscape_data[1]))).T,
+    )
+    print(experiment_results[region])
 
+    experiment_results[region]["data"]  = {
+        "soundscape": soundscape_data,
+        "focal": focal_data,
+    }
 
+with open("e1_results.json", "w") as file:
+    json.dump(experiment_results, file, indent=4)

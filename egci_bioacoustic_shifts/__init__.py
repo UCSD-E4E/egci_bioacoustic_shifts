@@ -14,6 +14,6 @@ def import_tensorflow():
     tf.get_logger().setLevel(logging.ERROR)
     return tf
 
-# tf = import_tensorflow()
+tf = import_tensorflow()
 
 from .utils import *

@@ -7,6 +7,7 @@ import numpy as np
 
 from scipy.linalg import toeplitz
 from scipy.stats import zscore, entropy
+import scipy.stats
 import librosa
 
 import statsmodels.api as sm
@@ -18,7 +19,7 @@ import csv
 import pandas as pd
 
 from datasets import load_dataset, Dataset, DatasetDict
-# import tensorflow_hub as hub
+import tensorflow_hub as hub
 from torch import binary_cross_entropy_with_logits, Tensor
 
 from tqdm import tqdm
@@ -85,8 +86,8 @@ def process_data(data: dict, audio_processing: Callable = lambda x: x, lag=256 )
             "offset_s": 0,
             "sr": sr,
             "gt": data["ebird_code_multilabel"],
-            # "entropy": h,
-            # "complexity": c,
+            "entropy": h,
+            "complexity": c,
             "lag": lag
         }
     return output_data
@@ -223,12 +224,13 @@ def load_EGCI(
     
     if indx is None:
         indx = np.random.choice(np.arange(len(ds[dataset_sub])), sample, replace=True)
-    out = multiprocess_data(process_data_func=process_data_func, data_repo = ds[dataset_sub], processes=workers, sample=sample)
-    
+    out, _ = multiprocess_data(process_data_func=process_data_func, data_repo = ds[dataset_sub], processes=workers, sample=sample)
+    # print(out)
     h, c, s = [], [], []
 
     
     for data in out:
+        # print(data)
         h.append(data["entropy"])
         c.append(data["complexity"])
         #s.append(gt[i])
@@ -269,12 +271,13 @@ def load_EGCI_losses(
         fig=None, 
         indx=50,
         process_data_func=process_data_with_identity, label_fig="",
-        lag: int = 512
+        lag: int = 512,
+        workers: int = 12
     ):
     """
     Calculates and plots EGCI for the BirdSet data along with losses 
     """
-    model=hub.load('https://www.kaggle.com/models/google/bird-vocalization-classifier/TensorFlow2/bird-vocalization-classifier/8'),
+    model=hub.load('https://www.kaggle.com/models/google/bird-vocalization-classifier/TensorFlow2/bird-vocalization-classifier/8')
     labels_path=hub.resolve('https://www.kaggle.com/models/google/bird-vocalization-classifier/TensorFlow2/bird-vocalization-classifier/8') + "/assets/label.csv"
     cotas = pd.read_csv('plotting_utils/Cotas_HxC_bins_' + str(int(lag)) + '.csv')
     noise = pd.read_csv('plotting_utils/coloredNoises_' + str(int(lag)) + '.csv')
@@ -297,8 +300,9 @@ def load_EGCI_losses(
             blocked_classes.append(class_list.index(ebird_code))
 
     # Get EGCI metrics
-    out, indx = multiprocess_data(process_data_func=process_data_func, data_repo = ds[dataset_sub], processes=12, sample=indx)
+    out, indx = multiprocess_data(process_data_func=process_data_func, data_repo = ds[dataset_sub], processes=workers, sample=indx)
     
+    print(out)
     h, c, preds, losses, labels = [], [], [], [], []
 
     for i in range(len(out)):
@@ -311,6 +315,7 @@ def load_EGCI_losses(
             try:
                 model_outputs = model.infer_tf(audio[np.newaxis, :])
             except:
+                print(e)
                 continue
 
             
@@ -325,7 +330,6 @@ def load_EGCI_losses(
             h.append(out[i]["entropy"])
             c.append(out[i]["complexity"])
             labels.append(label)
-       
 
     first_fig = fig is None
     if first_fig:
@@ -350,7 +354,7 @@ def load_EGCI_losses(
 
     if first_fig:
         plt.colorbar()
-        
+    
     return fig, out, (h, c, preds, losses, labels), indx
 
 
@@ -406,5 +410,13 @@ def plot_ols_plane(data, model, x_col, y_col, z_col):
     fig = go.Figure(data=[scatter, plane], layout=layout)
     fig.show()
     
-
+def measure_distrbution_metrics(focal, soundscapes):
+    q = np.array(focal)
+    p = np.array(soundscapes)
+    print(q.shape, p.shape)
+    return {
+        "Kullback-Leibler divergence Xeno-canto to Soundscapes": scipy.stats.entropy(p, q, axis=(1,0)),
+        "Kullback-Leibler divergence Soundscapes to Xeno-canto": scipy.stats.entropy(q, p, axis=(1,0)),
+        "Wasserstein Distance 2 Dimensional": scipy.stats.wasserstein_distance_nd(q, p)
+    }
     
