@@ -50,7 +50,7 @@ def class_names_from_csv(labels_path=None):
         class_names = [mid[0] for mid in csv_reader]
         return class_names[1:]
 
-def process_data(data: dict, audio_processing: Callable = lambda x: x, lag=256 ):
+def process_data(data: dict, audio_processing: Callable = lambda x, y, z: (x, z), lag=256 ):
     """
     Processes data from dictionary of audio data (e.g. dataset row)
     
@@ -73,19 +73,19 @@ def process_data(data: dict, audio_processing: Callable = lambda x: x, lag=256 )
 
     try:
         audio, sr = librosa.load(path, sr=32_000, duration=5, offset=i)
-
-        audio = audio_processing(audio)
-    
+        
+        label = data["ebird_code_multilabel"]
+        audio, label = audio_processing(audio, sr, data["ebird_code_multilabel"])
         h, c, lag = EGCI(audio, lag=lag)
     except Exception as e:
-        print(e)
+        print("2", e)
         return None
     
     output_data = {
             "path": path,
             "offset_s": 0,
             "sr": sr,
-            "gt": data["ebird_code_multilabel"],
+            "gt": label,
             "entropy": h,
             "complexity": c,
             "lag": lag

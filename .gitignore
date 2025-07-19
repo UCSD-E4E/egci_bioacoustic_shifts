@@ -199,3 +199,6 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/python,venv,jupyternotebooks
 
 *.json
+data_birdset
+wandb
+working_dir

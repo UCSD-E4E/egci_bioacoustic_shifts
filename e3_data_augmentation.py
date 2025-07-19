@@ -30,6 +30,17 @@ num_samples = 2000
 num_trials = 100
 birdset_extactor = extractors.Birdset()
 
+# Augmentation function
+class AugmentAudio():
+    def __init__(self, augmentations):
+        self.augmentations = augmentations
+    
+    def __call__(self, data):
+        if self.augmentations:
+            return process_data(data, audio_processing=self.augmentations)
+        return process_data(data)
+
+
 experiment_results = {}
 for region in regions:
     ads = birdset_extactor(region=region)
@@ -91,6 +102,7 @@ for region in regions:
         )
         args.num_train_epochs = 10
         args.eval_steps = 1000
+        args.dataloader_num_workers = 16
         args.run_name = parameters["run_name"] + " " + parameters["region"]
 
         trainer = PyhaTrainer(
@@ -99,26 +111,20 @@ for region in regions:
             training_args=args
         )
         #trainer.evaluate(eval_dataset=hsn_ads["test"], metric_key_prefix="Soundscape_test")
-        trainer.train()
-
         
+        
+        trainer.train()
         experiment_results[region][parameters["run_name"]] = trainer.evaluate(eval_dataset=ads["test"], metric_key_prefix="Soundscape")
 
         del model
         del trainer
-    
-    # Look at EGCI
-    def process_data_with_augmentation(data):
-        """
-        Identity function for data processing (applies no processing)
-        """
-        return process_data(data, audio_processing=parameters["augmentation"])
-
 
     _, _, soundscape_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="test_5s")
     _, _, focal_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="train")
+
+    process_aug = AugmentAudio(experiment_parameters[0]["augmentation"])
     _, _, aug_focal_data, _ = load_EGCI(
-        process_data_func=process_data_with_augmentation,
+        process_data_func=process_aug ,
         sample=num_samples, region=region, dataset_sub="train")
     
     # Format focal and soundscape EGCI for S
