@@ -230,11 +230,13 @@ def load_EGCI(
 
     
     for data in out:
-        # print(data)
-        h.append(data["entropy"])
-        c.append(data["complexity"])
-        #s.append(gt[i])
-        
+        # Errors loading data can be common...
+        if data is not None:
+            # print(data)
+            h.append(data["entropy"])
+            c.append(data["complexity"])
+            #s.append(gt[i])
+            
     cotas = pd.read_csv('plotting_utils/Cotas_HxC_bins_' + str(int(lag)) + '.csv')
     noise = pd.read_csv('plotting_utils/coloredNoises_' + str(int(lag)) + '.csv')
 
@@ -302,7 +304,7 @@ def load_EGCI_losses(
     # Get EGCI metrics
     out, indx = multiprocess_data(process_data_func=process_data_func, data_repo = ds[dataset_sub], processes=workers, sample=indx)
     
-    print(out)
+    #print(out)
     h, c, preds, losses, labels = [], [], [], [], []
 
     for i in range(len(out)):
@@ -413,7 +415,12 @@ def plot_ols_plane(data, model, x_col, y_col, z_col):
 def measure_distrbution_metrics(focal, soundscapes):
     q = np.array(focal)
     p = np.array(soundscapes)
-    print(q.shape, p.shape)
+
+    # Limits number if either distrbution had error'd samples
+    min_len = min(len(p), len(q))
+    q = q[:min_len]
+    p = p[:min_len]
+    #print(q.shape, p.shape)
     return {
         "Kullback-Leibler divergence Xeno-canto to Soundscapes": scipy.stats.entropy(p, q, axis=(1,0)),
         "Kullback-Leibler divergence Soundscapes to Xeno-canto": scipy.stats.entropy(q, p, axis=(1,0)),

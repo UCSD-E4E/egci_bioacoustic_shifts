@@ -119,9 +119,9 @@ for region in regions:
         del model
         del trainer
 
+    print(region)
     _, _, soundscape_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="test_5s")
     _, _, focal_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="train")
-
     process_aug = AugmentAudio(experiment_parameters[0]["augmentation"])
     _, _, aug_focal_data, _ = load_EGCI(
         process_data_func=process_aug ,
