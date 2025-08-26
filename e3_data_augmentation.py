@@ -137,6 +137,11 @@ for region in regions:
         np.vstack((np.array(aug_focal_data[0]), np.array(aug_focal_data[1]))).T,
         np.vstack((np.array(soundscape_data[0]), np.array(soundscape_data[1]))).T,
     )
+
+    experiment_results[region]["data"]  = {
+        "soundscape": soundscape_data,
+        "focal": focal_data,
+    }
     # Compute EGCI stats with and without data augmentations
     # Save results of both experiments
 with open("e3_results.json", "w") as file:

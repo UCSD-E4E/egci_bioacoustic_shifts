@@ -164,7 +164,7 @@ def EGCI(x: np.ndarray, lag: int = 512) -> tuple[float]:
     
     Parameters
     ----------
-    x : `np.ndarray`
+    x : `np.ndarray`plot
         An audio 
     lag : `int`
         t_max from the paper, the maximum value of t, the number of
@@ -188,27 +188,27 @@ def EGCI(x: np.ndarray, lag: int = 512) -> tuple[float]:
 
 # Plotting
 
-def plot_EGCI(H: list[float], C: list[float], lag: int):
+def plot_EGCI(H: list[float], C: list[float], lag: int, axes:plt.Axes=None, label=None, color="lightblue", plot_boundries=True):
     """
     Plots a scatterplot of EGCI against von Neumann's Entropy given lag
     """
-    
-    plt.figure(figsize=(11,9))
+    if axes is None:
+        axes = plt.subplot(1, figsize=(11,9))
     
     cotas = pd.read_csv('plotting_utils/Cotas_HxC_bins_' + str(int(lag)) + '.csv')
-    noise = pd.read_csv('plotting_utils/coloredNoises_' + str(int(lag)) + '.csv')
+    if plot_boundries:
+        noise = pd.read_csv('plotting_utils/coloredNoises_' + str(int(lag)) + '.csv')
+        axes.plot(cotas['Entropy'],cotas['Complexity'], '--k', label = 'HxC boundaries')
+        axes.plot(noise['Entropy'],noise['Complexity'], '--b', label = 'Colored noises')
 
-    for i in range(len(H)):
-        plt.scatter(H[i], C[i], marker='.', s=300)
-    
-    plt.plot(cotas['Entropy'],cotas['Complexity'], '--k', label = 'HxC boundaries')
-    plt.plot(noise['Entropy'],noise['Complexity'], '--b', label = 'Colored noises')
-    plt.xlim([0, 1])
-    plt.ylim([0, np.max(cotas['Complexity'])+0.01])
-    plt.ylabel('Complexity [Cf]')
-    plt.xlabel('Entropy [Hf]')
-    plt.legend(loc = 'best')
-    plt.show()
+    axes.scatter(H, C, c=color, marker='.', s=2, label=label)
+    axes.set_xlim([0, 1])
+    axes.set_ylim([0, np.max(cotas['Complexity'])+0.01])
+    axes.set_ylabel('Complexity [Cf]')
+    axes.set_xlabel('Entropy [Hf]')
+    axes.legend(loc = 'best')
+    # plt.show()
+    return axes
     
 def load_EGCI(
         region = "PER", 
