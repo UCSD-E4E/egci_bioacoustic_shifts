@@ -141,8 +141,9 @@ for region in regions:
     experiment_results[region]["data"]  = {
         "soundscape": soundscape_data,
         "focal": focal_data,
+        "augmented": aug_focal_data,
     }
     # Compute EGCI stats with and without data augmentations
     # Save results of both experiments
-with open("e3_results.json", "w") as file:
-    json.dump(experiment_results, file, indent=4)
+    with open("e3_results.json", "w") as file:
+        json.dump(experiment_results, file, indent=4)

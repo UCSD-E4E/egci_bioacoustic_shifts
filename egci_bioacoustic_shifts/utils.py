@@ -193,7 +193,7 @@ def plot_EGCI(H: list[float], C: list[float], lag: int, axes:plt.Axes=None, labe
     Plots a scatterplot of EGCI against von Neumann's Entropy given lag
     """
     if axes is None:
-        axes = plt.subplot(1, figsize=(11,9))
+        axes = plt.subplot(1, figsize=(11,9), dpi=500)
     
     cotas = pd.read_csv('plotting_utils/Cotas_HxC_bins_' + str(int(lag)) + '.csv')
     if plot_boundries:
@@ -204,9 +204,9 @@ def plot_EGCI(H: list[float], C: list[float], lag: int, axes:plt.Axes=None, labe
     axes.scatter(H, C, c=color, marker='.', s=2, label=label)
     axes.set_xlim([0, 1])
     axes.set_ylim([0, np.max(cotas['Complexity'])+0.01])
-    axes.set_ylabel('Complexity [Cf]')
-    axes.set_xlabel('Entropy [Hf]')
-    axes.legend(loc = 'best')
+    axes.set_ylabel('Complexity [Cf]', fontsize=18)
+    axes.set_xlabel('Entropy [Hf]', fontsize=18)
+    axes.legend(loc = 'upper left', fontsize=12)
     # plt.show()
     return axes
     
