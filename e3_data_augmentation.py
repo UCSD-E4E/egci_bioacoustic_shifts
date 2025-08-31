@@ -49,20 +49,20 @@ for region in regions:
             "augmentation": ComposeAudioLabel([
                 AddBackgroundNoise(
                     sounds_path="data_birdset/background_noise",
-                    min_snr_db=10,
-                    max_snr_db=30,
+                    min_snr_db=-10,
+                    max_snr_db=10,
                     noise_transform=PolarityInversion(),
                     p=0.5
                 ),
                 Gain(
-                    min_gain_db = -12,
-                    max_gain_db = 12,
+                    min_gain_db = -10,
+                    max_gain_db = 10,
                     p = 0.2
                 ),
                 MixItUp(
                     dataset_ref=ads["train"],
-                    min_snr_db=10,
-                    max_snr_db=30,
+                    min_snr_db=-10,
+                    max_snr_db=10,
                     noise_transform=PolarityInversion(),
                     p=0.7
                 )
@@ -100,9 +100,12 @@ for region in regions:
         args = PyhaTrainingArguments(
             working_dir="working_dir"
         )
-        args.num_train_epochs = 10
+        args.num_train_epochs = 5
         args.eval_steps = 1000
         args.dataloader_num_workers = 16
+        args.per_device_train_batch_size = 32
+        args.per_device_eval_batch_size = 32
+        
         args.run_name = parameters["run_name"] + " " + parameters["region"]
 
         trainer = PyhaTrainer(
@@ -121,11 +124,11 @@ for region in regions:
 
     print(region)
     _, _, soundscape_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="test_5s")
-    _, _, focal_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="train")
+    _, _, focal_data, focal_samples = load_EGCI(sample=num_samples, region=region, dataset_sub="train")
     process_aug = AugmentAudio(experiment_parameters[0]["augmentation"])
     _, _, aug_focal_data, _ = load_EGCI(
         process_data_func=process_aug ,
-        sample=num_samples, region=region, dataset_sub="train")
+        sample=focal_samples, region=region, dataset_sub="train")
     
     # Format focal and soundscape EGCI for S
     experiment_results[region]["div"] = {}
@@ -145,5 +148,5 @@ for region in regions:
     }
     # Compute EGCI stats with and without data augmentations
     # Save results of both experiments
-    with open("e3_results.json", "w") as file:
+    with open("e3_results_temp.json", "w") as file:
         json.dump(experiment_results, file, indent=4)
