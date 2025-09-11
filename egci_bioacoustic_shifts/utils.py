@@ -412,7 +412,7 @@ def plot_ols_plane(data, model, x_col, y_col, z_col):
     fig = go.Figure(data=[scatter, plane], layout=layout)
     fig.show()
     
-def measure_distrbution_metrics(focal, soundscapes):
+def measure_distrbution_metrics(focal, soundscapes, emd=True):
     q = np.array(focal)
     p = np.array(soundscapes)
 
@@ -420,10 +420,15 @@ def measure_distrbution_metrics(focal, soundscapes):
     min_len = min(len(p), len(q))
     q = q[:min_len]
     p = p[:min_len]
-    #print(q.shape, p.shape)
-    return {
-        "Kullback-Leibler divergence Xeno-canto to Soundscapes": scipy.stats.entropy(p, q, axis=(1,0)),
-        "Kullback-Leibler divergence Soundscapes to Xeno-canto": scipy.stats.entropy(q, p, axis=(1,0)),
-        "Wasserstein Distance 2 Dimensional": scipy.stats.wasserstein_distance_nd(q, p)
-    }
+    if emd:
+        return {
+            "Kullback-Leibler divergence Xeno-canto to Soundscapes": scipy.stats.entropy(p, q, axis=(1,0)),
+            "Kullback-Leibler divergence Soundscapes to Xeno-canto": scipy.stats.entropy(q, p, axis=(1,0)),
+            "Wasserstein Distance 2 Dimensional": scipy.stats.wasserstein_distance_nd(q, p)
+        }
+    else:
+        return {
+            "Kullback-Leibler divergence Xeno-canto to Soundscapes": scipy.stats.entropy(p, q, axis=(1,0)),
+            "Kullback-Leibler divergence Soundscapes to Xeno-canto": scipy.stats.entropy(q, p, axis=(1,0)),
+        }
     
