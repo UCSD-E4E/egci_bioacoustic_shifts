@@ -1,6 +1,6 @@
 # imports
 
-from multiprocessing import Pool
+from multiprocessing import ThreadPool
 
 import array
 import numpy as np
@@ -118,7 +118,7 @@ def multiprocess_data(
     else:
         indx_sampled = sample
 
-    with Pool(processes) as p:
+    with ThreadPool(processes) as p:
         data = list(tqdm(p.imap(process_data_func, data_repo.select(indx_sampled))))
         
     return data, indx_sampled
