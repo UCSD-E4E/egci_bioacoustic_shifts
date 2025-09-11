@@ -203,3 +203,5 @@ data_birdset
 wandb
 working_dir
 wav
+
+!e3_results_data_aug_search.json
