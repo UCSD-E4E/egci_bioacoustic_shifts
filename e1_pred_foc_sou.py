@@ -9,8 +9,8 @@ from egci_bioacoustic_shifts import load_EGCI, measure_distrbution_metrics
 
 # Experiment Parameters
 regions = ["HSN", "PER", "UHH", "SNE", "POW", "NES"]
-num_samples = 1000 #2000
-num_trials = 100
+num_samples = 2000
+num_trials = 1000
 
 
 # TODO: Move data into its own file
@@ -28,20 +28,20 @@ def run_trial(dataset, get_X_Y, reshuffle_labels=False, test_size=0.2):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
     clf = SVC()
     clf.fit(X_train, y_train)
-    return clf.score(X_test, y_test)
+    return clf.score(X_test, y_test), clf, X_test, y_test
 
-def run_experiment(dataset_info, get_X_Y, iterations=100):
-    sample_stat = run_trial(dataset_info, get_X_Y, reshuffle_labels=False)
+# def run_experiment(dataset_info, get_X_Y, iterations=100):
+#     sample_stat = run_trial(dataset_info, get_X_Y, reshuffle_labels=False)
 
-    null_hypo_trial_results = []
-    for i in range(iterations):
-        null_hypo_trial_results.append(run_trial(dataset_info, get_X_Y,  reshuffle_labels=True))
+#     null_hypo_trial_results = []
+#     for i in range(iterations):
+#         null_hypo_trial_results.append(run_trial(dataset_info, get_X_Y,  reshuffle_labels=True))
 
-    return {
-        "sample_stat": sample_stat,
-        "p-value": (sample_stat < np.array(null_hypo_trial_results)).mean(),
-        "null_hypo_trials": null_hypo_trial_results
-    }
+#     return {
+#         "sample_stat": sample_stat,
+#         "p-value": (sample_stat < np.array(null_hypo_trial_results)).mean(),
+#         "null_hypo_trials": null_hypo_trial_results
+#     }
 
 
 # Actual Experiment
@@ -53,11 +53,11 @@ for region in regions:              #Change sample to indx
     # Format focal and soundscape EGCI for SVM
     labels = []
     (h, c, _) = copy.deepcopy(soundscape_data)
-    labels.extend([0] * num_samples)
+    labels.extend([0] * len(h))
 
     h.extend(focal_data[0])
     c.extend(focal_data[1])
-    labels.extend([1] * num_samples)
+    labels.extend([1] * len(focal_data[0]))
 
     data = np.vstack((np.array(h), np.array(c), np.array(labels))).T
     np.random.shuffle(data)
@@ -65,7 +65,23 @@ for region in regions:              #Change sample to indx
 
     # Run SVM training and permutation test
     experiment_results[region] = {}
-    experiment_results[region]["svm"] = run_experiment(data, get_X_Y, iterations=num_trials)
+
+    sample_stat, clf, X_test, y_test = run_trial(data, get_X_Y, reshuffle_labels=False, test_size=0.2)
+
+
+    scores = []
+    for i in range(num_trials):
+        np.random.shuffle(y_test)
+        scores.append(clf.score(X_test, y_test))
+    
+    experiment_results[region]["svm"] = {
+        "sample_stat": sample_stat,
+        "p-value": (sample_stat < np.array(scores)).mean(),
+        "null_hypo_trials": scores
+    }
+
+    # Removed to test permutations on model output for better test
+    # experiment_results[region]["svm"] = run_experiment(data, get_X_Y, iterations=num_trials)
     
 
     # TODO Add in the normal divergence metrics
