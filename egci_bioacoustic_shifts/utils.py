@@ -72,10 +72,9 @@ def process_data(data: dict, audio_processing: Callable = lambda x, y, z: (x, z)
         i = np.random.randint(0, data["length"] - 5)
 
     try:
-        audio, sr = librosa.load(path, sr=32_000, duration=5, offset=i)
-        
+        audio1, sr = librosa.load(path, sr=32_000, duration=5, offset=i)
         label = data["ebird_code_multilabel"]
-        audio, label = audio_processing(audio, sr, data["ebird_code_multilabel"])
+        audio, label = audio_processing(audio1, sr, label)
         h, c, lag = EGCI(audio, lag=lag)
     except Exception as e:
         print("2", e)
@@ -96,7 +95,7 @@ def process_data_with_identity(data):
     """
     Identity function for data processing (applies no processing)
     """
-    return process_data(data, audio_processing=lambda x: x )
+    return process_data(data, audio_processing=lambda audio, sr, label: (audio,label) )
 
 
 def multiprocess_data(
@@ -222,9 +221,9 @@ def load_EGCI(
     if ds is None:
         ds = load_dataset("DBD-research-group/BirdSet", region, trust_remote_code=True, revision="b0c14a03571a7d73d56b12c4b1db81952c4f7e64")
     
-    if indx is None:
-        indx = np.random.choice(np.arange(len(ds[dataset_sub])), sample, replace=True)
-    out, _ = multiprocess_data(process_data_func=process_data_func, data_repo = ds[dataset_sub], processes=workers, sample=sample)
+    # if indx is None:
+    #     indx = np.random.choice(np.arange(len(ds[dataset_sub])), sample, replace=True)
+    out, indx_sampled = multiprocess_data(process_data_func=process_data_func, data_repo = ds[dataset_sub], processes=workers, sample=sample)
     # print(out)
     h, c, s = [], [], []
 
@@ -265,7 +264,7 @@ def load_EGCI(
 
     if first_fig:
         plt.colorbar()
-    return fig, out, (h, c, s), indx
+    return fig, out, (h, c, s), indx_sampled
 
 def load_EGCI_losses(
         region = "PER", 
@@ -316,7 +315,7 @@ def load_EGCI_losses(
                 continue
             try:
                 model_outputs = model.infer_tf(audio[np.newaxis, :])
-            except:
+            except Exception as e:
                 print(e)
                 continue
 
@@ -432,3 +431,4 @@ def measure_distrbution_metrics(focal, soundscapes, emd=True):
             "Kullback-Leibler divergence Soundscapes to Xeno-canto": scipy.stats.entropy(q, p, axis=(1,0)),
         }
     
+

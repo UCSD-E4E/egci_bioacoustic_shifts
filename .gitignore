@@ -202,3 +202,4 @@ pip-selfcheck.json
 data_birdset
 wandb
 working_dir
+wav
