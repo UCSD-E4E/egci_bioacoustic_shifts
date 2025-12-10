@@ -24,10 +24,11 @@ dependencies = [
     "seaborn>=0.13.2",
     "statsmodels>=0.14.5",
     "scikit-image>=0.25.2",
-    "tensorflow>=2.19.0",
-    "tensorflow-hub>=0.16.1",
     "perch>=0.0.9",
     "plotly>=6.2.0",
+    "gpustat>=1.1.1",
+    "tensorflow-hub>=0.16.1",
+    "scikit-maad>=1.5.1",
 ]
 
 [tool.setuptools]
