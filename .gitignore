@@ -207,3 +207,5 @@ wav
 !e1_results.json
 !e2_results.json
 !e3_results_data_aug_search.json
+e2_metrics copy.pkl
+e1_metrics copy.pkl
