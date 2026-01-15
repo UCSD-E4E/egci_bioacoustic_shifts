@@ -10,8 +10,6 @@ from pyha_analyzer.preprocessors import MelSpectrogramPreprocessors, MixItUp, Co
 from audiomentations import Compose, AddColorNoise, AddBackgroundNoise, PolarityInversion, Gain
 from pyha_analyzer.models import EfficentNet
 
-# from sam_preprocessor import SegmentAudioPreprocessors
-
 import numpy as np
 import torch
 import random
@@ -47,35 +45,35 @@ experiment_results = {}
 for region in regions:
     ads = birdset_extactor(region=region)
     experiment_parameters = [
-        # {
-        #     "augmentation": ComposeAudioLabel([
-        #         # AddBackgroundNoise(
-        #         #     sounds_path="data_birdset/background_noise",
-        #         #     min_snr_db=-10,
-        #         #     max_snr_db=10,
-        #         #     noise_transform=PolarityInversion(),
-        #         #     p=0.5
-        #         # ),
-        #         Gain(
-        #             min_gain_db = -10,
-        #             max_gain_db = 10,
-        #             p = 0.2
-        #         ),
-        #         MixItUp(
-        #             dataset_ref=ads["train"],
-        #             min_snr_db=-10,
-        #             max_snr_db=10,
-        #             noise_transform=PolarityInversion(),
-        #             p=0.7
-        #         )
+        {
+            "augmentation": ComposeAudioLabel([
+                AddBackgroundNoise(
+                    sounds_path="data_birdset/background_noise",
+                    min_snr_db=-10,
+                    max_snr_db=10,
+                    noise_transform=PolarityInversion(),
+                    p=0.5
+                ),
+                Gain(
+                    min_gain_db = -10,
+                    max_gain_db = 10,
+                    p = 0.2
+                ),
+                MixItUp(
+                    dataset_ref=ads["train"],
+                    min_snr_db=-10,
+                    max_snr_db=10,
+                    noise_transform=PolarityInversion(),
+                    p=0.7
+                )
 
-        #     ]),
-        #     "run_name": "birdset_augmentations_Background-Gain-MixitUp",
-        #     "region": region
-        # },
+            ]),
+            "run_name": "birdset_augmentations_Background-Gain-MixitUp",
+            "region": region
+        },
         {
             "augmentation": None,
-            "run_name": "birdset-SAM",
+            "run_name": "birdset",
             "region": region
         }
     ]
@@ -92,14 +90,6 @@ for region in regions:
             duration=5, 
             augment=None,
         )
-
-        # sam_preprocessor = SegmentAudioPreprocessors()
-
-        print(ads['train']['audio'])
-
-        # ads["train"].set_transform(sam_preprocessor)
-        # ads["valid"].set_transform(sam_preprocessor)
-        # ads["test"].set_transform(sam_preprocessor)
 
         ads["train"].set_transform(preprocessor)
         ads["valid"].set_transform(test_preprocessor)
