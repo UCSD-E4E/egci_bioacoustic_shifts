@@ -234,12 +234,17 @@ def load_EGCI(
         dataset_sub="test_5s",
         fig=None, 
         indx=None,
-        process_data_func=process_data, sample=2000, label="", ds=None, workers=12, lag=256):
+        process_data_func=process_data, 
+        restrict_1_label_per_clip=True,
+        sample=2000, label="", ds=None, workers=12, lag=256):
     """
     Loads in BirdSet dataset split and performs data processing on it, then plots EGCI
     """
     if ds is None:
         ds = load_dataset("DBD-research-group/BirdSet", region, trust_remote_code=True, revision="b0c14a03571a7d73d56b12c4b1db81952c4f7e64")
+    
+    if restrict_1_label_per_clip:
+        ds[dataset_sub].filter(lambda x: len(x['ebird_code_multilabel']) == 1)
     
     # if indx is None:
     #     indx = np.random.choice(np.arange(len(ds[dataset_sub])), sample, replace=True)
@@ -293,7 +298,8 @@ def load_EGCI_losses(
         indx=50,
         process_data_func=process_data_with_identity, label_fig="",
         lag: int = 512,
-        workers: int = 12
+        workers: int = 12,
+        restrict_1_label_per_clip=True
     ):
     """
     Calculates and plots EGCI for the BirdSet data along with losses 
@@ -306,6 +312,9 @@ def load_EGCI_losses(
     
     ds = load_dataset("DBD-research-group/BirdSet", region, trust_remote_code=True, revision="b0c14a03571a7d73d56b12c4b1db81952c4f7e64")
     
+    if restrict_1_label_per_clip:
+        ds[dataset_sub].filter(lambda x: len(x['ebird_code_multilabel']) == 1)
+
     class_list = ds["test"].features["ebird_code"].names
 
     # In case model has a missing label from dataset
