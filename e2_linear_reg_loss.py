@@ -10,9 +10,12 @@ from statsmodels.compat import lzip
 from egci_bioacoustic_shifts import load_EGCI_losses
 
 # Experiment Parameters
-regions = ["SSW"] #["PER", "UHH", "SNE", "POW", "NES"] # "HSN"
-num_samples = 2000
+regions = ["HSN"]#["SSW"] #["PER", "UHH", "SNE", "POW", "NES"] # "HSN"
+num_samples = 20#00
 num_trials = 100
+only_1_label_each = True
+
+
 name = ["t value", "p value"]
 # Actual Experiment
 experiment_results = {}
@@ -21,7 +24,8 @@ for region in regions:
     for i in range(num_trials):
         experiment_results[region][i] = {}
 
-        fig, out, (h, c, preds, losses, labels), indx, outs = load_EGCI_losses(indx=num_samples, region=region, dataset_sub="test_5s")
+        fig, out, (h, c, preds, losses, labels), indx, outs = load_EGCI_losses(
+            indx=num_samples, region=region, dataset_sub="test_5s", restrict_1_label_per_clip=only_1_label_each)
         # fig, out, focal_data,  indx = load_EGCI(indx=num_samples, region=region, dataset_sub="train")
         
         df = pd.DataFrame({"Entropy": h, "Complexity": c, "Loss": losses, "GT": labels, "Predictions": preds})
