@@ -8,10 +8,12 @@ import json
 from statsmodels.compat import lzip
 
 from egci_bioacoustic_shifts import load_EGCI_losses
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 # Experiment Parameters
-regions = ["HSN"]#["SSW"] #["PER", "UHH", "SNE", "POW", "NES"] # "HSN"
-num_samples = 20#00
+regions = ["SSW", "HSN", "PER", "UHH", "SNE", "POW", "NES"]
+num_samples = 2000
 num_trials = 100
 only_1_label_each = True
 
@@ -47,11 +49,11 @@ for region in regions:
             "raw_data": outs
         }
 
-        print(experiment_results)
-        with open("e2_results_SSW.json", "w") as file:
+        # print(experiment_results)
+        with open(f"e2_results_{only_1_label_each}.json", "w") as file:
             json.dump(experiment_results, file, indent=4)
-    print(experiment_results)
-    with open("e2_results_SSW.json", "w") as file:
+    # print(experiment_results)
+    with open(f"e2_results_{only_1_label_each}.json", "w") as file:
         json.dump(experiment_results, file, indent=4)
 
 
