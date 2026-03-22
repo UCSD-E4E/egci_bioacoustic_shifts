@@ -6,11 +6,14 @@ import numpy as np
 import copy
 import json
 from egci_bioacoustic_shifts import load_EGCI, measure_distrbution_metrics
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 # Experiment Parameters
-regions = ["SSW"] #["HSN", "PER", "UHH", "SNE", "POW", "NES"]
+regions = ["SSW", "HSN", "PER", "UHH", "SNE", "POW", "NES"]
 num_samples = 2000
 num_trials = 1000
+only_1_label_each = True
 
 
 # TODO: Move data into its own file
@@ -47,8 +50,10 @@ def run_trial(dataset, get_X_Y, reshuffle_labels=False, test_size=0.2):
 # Actual Experiment
 experiment_results = {}
 for region in regions:              #Change sample to indx
-    _, soundscape_out, soundscape_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="test_5s")
-    _, focal_out, focal_data, _ = load_EGCI(sample=num_samples, region=region, dataset_sub="train")
+    _, soundscape_out, soundscape_data, _ = load_EGCI(
+        sample=num_samples, region=region, dataset_sub="test_5s", restrict_1_label_per_clip=only_1_label_each)
+    _, focal_out, focal_data, _ = load_EGCI(
+        sample=num_samples, region=region, dataset_sub="train", restrict_1_label_per_clip=only_1_label_each)
     
     # Format focal and soundscape EGCI for SVM
     labels = []
@@ -99,5 +104,5 @@ for region in regions:              #Change sample to indx
         "focal": focal_data,
     }
 
-with open("e1_results_SSW.json", "w") as file:
+with open(f"e1_results_{only_1_label_each}.json", "w") as file:
     json.dump(experiment_results, file, indent=4)

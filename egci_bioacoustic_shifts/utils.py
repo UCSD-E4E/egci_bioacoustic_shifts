@@ -244,7 +244,7 @@ def load_EGCI(
         ds = load_dataset("DBD-research-group/BirdSet", region, trust_remote_code=True, revision="b0c14a03571a7d73d56b12c4b1db81952c4f7e64")
     
     if restrict_1_label_per_clip:
-        ds[dataset_sub].filter(lambda x: len(x['ebird_code_multilabel']) == 1)
+        ds[dataset_sub] = ds[dataset_sub].filter(lambda x: len(x['ebird_code_multilabel']) == 1)
     
     # if indx is None:
     #     indx = np.random.choice(np.arange(len(ds[dataset_sub])), sample, replace=True)
@@ -313,7 +313,7 @@ def load_EGCI_losses(
     ds = load_dataset("DBD-research-group/BirdSet", region, trust_remote_code=True, revision="b0c14a03571a7d73d56b12c4b1db81952c4f7e64")
     
     if restrict_1_label_per_clip:
-        ds[dataset_sub].filter(lambda x: len(x['ebird_code_multilabel']) == 1)
+        ds[dataset_sub] = ds[dataset_sub].filter(lambda x: len(x['ebird_code_multilabel']) == 1)
 
     class_list = ds["test"].features["ebird_code"].names
 
