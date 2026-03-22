@@ -43,8 +43,10 @@ def build_col_spec(orig_spec: str) -> str:
 
 
 def is_pvalue_row(first_cell: str) -> bool:
-    return 'p-value' in first_cell.lower().replace(' ', '')
-
+    return (
+        'p-value' in first_cell.lower().replace(' ', '') or
+        'pvalue' in first_cell.lower().replace(' ', '')
+    )
 
 def wrap_header_cell(cell: str) -> str:
     return '{' + cell + '}' if cell.strip() else cell
@@ -55,11 +57,11 @@ def wrap_pvalue_cells(cells: list) -> list:
     for c in cells[1:]:
         try:
             if float(c) < 0.05:
-                result.append(f'\\cellcolor{{gray!20}}{c}')
+                result.append('\\maxf{' + c + '}')
             else:
                 result.append(c)
         except ValueError:
-            result.append(f'\\cellcolor{{gray!20}}{c}')
+            result.append('\\maxf{' + c + '}')
     return result
 
 
